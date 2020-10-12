@@ -18,6 +18,24 @@
                 p(v-if="!item.inCart") ADD TO CART
                 .cover(v-else)
                   .check
+  .screen.-left
+    .app-bar
+     img.logo(src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/pngwave.png")
+    .title Picked items
+    .shop-items
+      .item(v-for="item in shopItems")
+        .item-block
+          .image-area(:style="{backgroundColor: item.color}")
+            img.image(:src="item.image")
+          .name {{ item.name }}
+          .description {{ item.description }}
+          .bottom-area
+            .price ${{ item.price }}
+            .button(@click="addToCart(item)" :ref="'addButton' + item.id" :class="{'-active': item.inCart}")
+              transition(name="buttonText" mode="out-in")
+                p(v-if="!item.inCart") ADD TO CART
+                .cover(v-else)
+                  .check
   .screen.-right(ref="cartItems")
     .app-bar
      img.logo(src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/pngwave.png")

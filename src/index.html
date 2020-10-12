@@ -1,0 +1,338 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Shaw Interactive Shopping Wall</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;700&amp;display=swap">
+  
+    <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+  <style type="text/css">body {
+    font-family: "Rubik", sans-serif;
+    color: #303841;
+  }
+  .wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    flex-wrap: wrap;
+    padding: 40px 20px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .wrapper::before {
+      content: "";
+      display: block;
+      position: fixed;
+      width: 300%;
+      height: 100%;
+      top: 50%;
+      left: 50%;
+      border-radius: 100%;
+      transform: translateX(-50%) skewY(-8deg);
+      background-color: #f6c90e;
+      z-index: -1;
+      animation: wave 8s ease-in-out infinite alternate;
+  }
+  @keyframes wave {
+  0% {
+      transform: translateX(-50%) skew(0deg, -8deg);
+  }
+  100% {
+      transform: translateX(-30%) skew(8deg, -4deg);
+  }
+  }
+  .screen {
+    background-color: #fff;
+    box-sizing: border-box;
+    width: 340px;
+    height: 600px;
+    box-shadow: 0 3.2px 2.2px rgba(0, 0, 0, 0.02), 0 7px 5.4px rgba(0, 0, 0, 0.028), 0 12.1px 10.1px rgba(0, 0, 0, 0.035), 0 19.8px 18.1px rgba(0, 0, 0, 0.042), 0 34.7px 33.8px rgba(0, 0, 0, 0.05), 0 81px 81px rgba(0, 0, 0, 0.07);
+    border-radius: 30px;
+    overflow-y: scroll;
+    padding: 0 28px;
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .screen::before {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 100%;
+      background-color: #f6c90e;
+      top: -20%;
+      left: -50%;
+      z-index: 0;
+  }
+  .screen::-webkit-scrollbar {
+      display: none;
+  }
+  .screen > .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+      position: relative;
+  }
+  .app-bar {
+    padding: 12px 0;
+    position: relative;
+  }
+  .app-bar > .logo {
+      display: block;
+      width: 50px;
+  }
+  .shop-items {
+    position: relative;
+  }
+  .item-block {
+    padding: 40px 0 70px;
+  }
+  .item-block:first-child {
+      padding-top: 0;
+  }
+  .item-block > .image-area {
+      border-radius: 30px;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+  }
+  .item-block > .image-area > .image {
+        display: block;
+        width: 100%;
+        filter: drop-shadow(0 30px 20px rgba(0, 0, 0, 0.2));
+        transform: rotate(-24deg);
+        margin-left: -16px;
+  }
+  .item-block > .name {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 26px 0 20px;
+      line-height: 1.5;
+  }
+  .item-block > .description {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.8;
+      margin-bottom: 20px;
+  }
+  .item-block > .bottom-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .item-block > .bottom-area > .price {
+        font-size: 18px;
+        font-weight: bold;
+  }
+  .item-block > .bottom-area > .button {
+        cursor: pointer;
+        background-color: #f6c90e;
+        font-weight: bold;
+        font-size: 14px;
+        box-sizing: border-box;
+        height: 46px;
+        padding: 16px 20px;
+        border-radius: 100px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.4s, background-color 0.2s;
+        user-select: none;
+        white-space: nowrap;
+        position: relative;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+  }
+  .item-block > .bottom-area > .button:hover {
+          background-color: #f8d43f;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .item-block > .bottom-area > .button.-active {
+          pointer-events: none;
+          cursor: default;
+  }
+  .item-block > .bottom-area > .button > .cover {
+          width: 16px;
+          height: 16px;
+          position: absolute;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+  }
+  .item-block > .bottom-area > .button > .cover > .check {
+            width: 100%;
+            height: 100%;
+            transform: translate(-100%, -73%) rotate(-45deg);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+  }
+  .item-block > .bottom-area > .button > .cover > .check::before, .item-block > .bottom-area > .button > .cover > .check::after {
+              content: "";
+              display: block;
+              background-color: #303841;
+              position: absolute;
+              left: 0;
+              bottom: 0;
+              border-radius: 10px;
+  }
+  .item-block > .bottom-area > .button > .cover > .check::before {
+              width: 3px;
+              height: 50%;
+  }
+  .item-block > .bottom-area > .button > .cover > .check::after {
+              width: 100%;
+              height: 3px;
+  }
+  .cart-items {
+    position: relative;
+  }
+  .no-content {
+    position: relative;
+  }
+  .no-content > .text {
+      font-size: 14px;
+  }
+  .cart-item {
+    display: flex;
+    padding: 20px 0;
+  }
+  .cart-item > .right > .name {
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1.5;
+      margin-bottom: 10px;
+  }
+  .cart-item > .right > .price {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 16px;
+  }
+  .cart-item > .right > .count {
+      display: flex;
+      align-items: center;
+  }
+  .cart-item > .right > .count > .number {
+        font-size: 14px;
+        margin: 0 14px;
+        width: 20px;
+        text-align: center;
+  }
+  .cart-item > .right > .count .button {
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        border-radius: 100%;
+        background-color: #eee;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.2s;
+        user-select: none;
+  }
+  .cart-item > .right > .count .button:hover {
+          background-color: #ddd;
+  }
+  .cart-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    background-color: #eee;
+    margin-right: 34px;
+  }
+  .cart-image > .image-wrapper > .image {
+      display: block;
+      width: 140%;
+      transform: rotate(-28deg) translateY(-40px);
+      filter: drop-shadow(0 30px 20px rgba(0, 0, 0, 0.2));
+  }
+  .buttonText-leave-active,
+  .buttonText-enter-active {
+    transition: opacity 0.2s, top 0.35s;
+  }
+  .buttonText-leave-to,
+  .buttonText-enter {
+    opacity: 0;
+  }
+  .cartList-enter-active {
+    transition: all 2s;
+  }
+  .cartList-enter-active > .right > .name,
+    .cartList-enter-active > .right > .price {
+      transition: 0.4s;
+  }
+  .cartList-enter-active > .right > .name {
+      transition-delay: 0.7s;
+  }
+  .cartList-enter-active > .right > .price {
+      transition-delay: 0.85s;
+  }
+  .cartList-enter-active > .right > .count {
+      transition: opacity 0.4s;
+      transition-delay: 1s;
+  }
+  .cartList-enter-active .cart-image {
+      transition: 0.5s cubic-bezier(0.79, 0.01, 0.22, 1);
+  }
+  .cartList-enter-active .cart-image > .image-wrapper {
+        transition: 0.5s cubic-bezier(0.79, 0.01, 0.22, 1) 0.1s;
+  }
+  .cartList-enter > .right > .name,
+  .cartList-enter > .right > .price {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  .cartList-enter > .right .count {
+    opacity: 0;
+  }
+  .cartList-enter .cart-image {
+    transform: scale(0);
+  }
+  .cartList-enter .cart-image > .image-wrapper {
+      transform: scale(0);
+  }
+  .cartList-leave-active {
+    transition: 0.7s cubic-bezier(0.79, 0.01, 0.22, 1);
+    position: absolute;
+  }
+  .cartList-leave-to {
+    transform: scale(0);
+    opacity: 0;
+  }
+  .cartList-move {
+    transition: 0.7s cubic-bezier(0.79, 0.01, 0.22, 1);
+  }
+  .noContent-enter-active, .noContent-leave-active {
+    transition: opacity 0.5s;
+    position: absolute;
+  }
+  .noContent-enter, .noContent-leave-to {
+    opacity: 0;
+  }
+  </style></head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="screen -left"><div class="app-bar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/pngwave.png" class="logo"></div><div class="title">Picked items</div><div class="shop-items"><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(225, 231, 237);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/air-zoom-pegasus-36-mens-running-shoe-wide-D24Mcz-removebg-preview.png" class="image"></div><div class="name">Nike Air Zoom Pegasus 36</div><div class="description">The iconic Nike Air Zoom Pegasus 36 offers more cooling and mesh that targets breathability across high-heat areas. A slimmer heel collar and tongue reduce bulk, while exposed cables give you a snug fit at higher speeds.</div><div class="bottom-area"><div class="price">$108.97</div><div class="button -active" style="width: 46px;"><div class="cover"><div class="check"></div></div></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(77, 49, 127);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/air-zoom-pegasus-36-shield-mens-running-shoe-24FBGb__1_-removebg-preview.png" class="image"></div><div class="name">Nike Air Zoom Pegasus 36 Shield</div><div class="description">The Nike Air Zoom Pegasus 36 Shield gets updated to conquer wet routes. A water-repellent upper combines with an outsole that helps create grip on wet surfaces, letting you run in confidence despite the weather.</div><div class="bottom-area"><div class="price">$89.97</div><div class="button"><p>ADD TO CART</p></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(232, 208, 38);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/cruzrone-unisex-shoe-T2rRwS-removebg-preview.png" class="image"></div><div class="name">Nike CruzrOne</div><div class="description">Designed for steady, easy-paced movement, the Nike CruzrOne keeps you going. Its rocker-shaped sole and plush, lightweight cushioning let you move naturally and comfortably. The padded collar is lined with soft wool, adding luxury to every step, while mesh details let your foot breathe. There’s no finish line—there’s only you, one step after the next.</div><div class="bottom-area"><div class="price">$100.97</div><div class="button"><p>ADD TO CART</p></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(253, 88, 74);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/epic-react-flyknit-2-mens-running-shoe-2S0Cn1-removebg-preview.png" class="image"></div><div class="name">Nike Epic React Flyknit 2</div><div class="description">The Nike Epic React Flyknit 2 takes a step up from its predecessor with smooth, lightweight performance and a bold look. An updated Flyknit upper conforms to your foot with a minimal, supportive design. Underfoot, durable Nike React technology defies the odds by being both soft and responsive, for comfort that lasts as long as you can run.</div><div class="bottom-area"><div class="price">$89.97</div><div class="button"><p>ADD TO CART</p></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(212, 215, 214);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/odyssey-react-flyknit-2-mens-running-shoe-T3VG7N-removebg-preview.png" class="image"></div><div class="name">Nike Odyssey React Flyknit 2</div><div class="description">The Nike Odyssey React Flyknit 2 provides a strategic combination of lightweight Flyknit construction and synthetic material for support. Underfoot, Nike React cushioning delivers a soft, springy ride for a route that begs to be crushed.</div><div class="bottom-area"><div class="price">$71.97</div><div class="button"><p>ADD TO CART</p></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(242, 245, 244);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/react-infinity-run-flyknit-mens-running-shoe-RQ484B__2_-removebg-preview.png" class="image"></div><div class="name">Nike React Infinity Run Flyknit</div><div class="description">A pioneer in the running shoe frontier honors the original pioneer of running culture with the Nike React Infinity Run Flyknit. Blue Ribbon Track Club-inspired details pay homage to the haven that was created before running was even popular. This running shoe is designed to help reduce injury and keep you on the run. More foam and improved upper details provide a secure and cushioned feel.</div><div class="bottom-area"><div class="price">$160</div><div class="button"><p>ADD TO CART</p></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(34, 175, 220);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/react-miler-mens-running-shoe-DgF6nr-removebg-preview.png" class="image"></div><div class="name">Nike React Miler</div><div class="description">The Nike React Miler gives you trusted stability for miles with athlete-informed performance. Made for dependability on your long runs, its intuitive design offers a locked-in fit and a durable feel.</div><div class="bottom-area"><div class="price">$130</div><div class="button"><p>ADD TO CART</p></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(181, 3, 32);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/renew-ride-mens-running-shoe-JkhdfR-removebg-preview.png" class="image"></div><div class="name">Nike Renew Ride</div><div class="description">The Nike Renew Ride helps keep the committed runner moving with plush cushioning. Firm support at the outsole helps you maintain stability no matter the distance.</div><div class="bottom-area"><div class="price">$60.97</div><div class="button"><p>ADD TO CART</p></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(53, 105, 161);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/vaporfly-4-flyknit-running-shoe-v7G3FB-removebg-preview.png" class="image"></div><div class="name">Nike Vaporfly 4% Flyknit</div><div class="description">Built to meet the exacting needs of world-class marathoners, Nike Vaporfly 4% Flyknit is designed for record-breaking speed. The Flyknit upper delivers breathable support, while the responsive foam and full-length plate provide incredible energy return for all 26.2.</div><div class="bottom-area"><div class="price">$187.97</div><div class="button"><p>ADD TO CART</p></div></div></div></div><div class="item"><div class="item-block"><div class="image-area" style="background-color: rgb(84, 212, 201);"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/zoom-fly-3-premium-mens-running-shoe-XhzpPH-removebg-preview.png" class="image"></div><div class="name">Nike Zoom Fly 3 Premium</div><div class="description">Inspired by the Vaporfly, the Nike Zoom Fly 3 Premium gives distance runners race-day comfort and durability. The power of a carbon fiber plate keeps you in the running mile after mile.</div><div class="bottom-area"><div class="price">$160</div><div class="button"><p>ADD TO CART</p></div></div></div></div></div></div><div class="screen -right"><div class="app-bar"><img src="https://media-exp1.licdn.com/dms/image/C510BAQHoelrBZc3R-Q/company-logo_200_200/0?e=2159024400&amp;v=beta&amp;t=QC-NVMzYOlqV1k9c_llNGhbOOXEkZiiXfmHiyrsO39k" class="logo"></div><div class="title">Your cart</div><!----><div class="cart-items"><div><div class="cart-item"><div class="left"><div class="cart-image"><div class="image-wrapper"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1315882/air-zoom-pegasus-36-mens-running-shoe-wide-D24Mcz-removebg-preview.png" class="image"></div></div></div><div class="right"><div class="name">Nike Air Zoom Pegasus 36</div><div class="price">$108.97</div><div class="count"><div class="button">&lt;</div><div class="number">1</div><div class="button">&gt;</div></div></div></div></div></div></div></div>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.6/gsap.min.js"></script>
+    
+    <script src="./script.js"></script>
+  
+  
+    <script>
+      if ( !window['CodePenVueComponent'] ) {
+        throw new Error('Error compiling Vue component.');
+      }
+      new Vue(CodePenVueComponent).$mount('#app');
+    </script>
+  
+  
+  </body>
+  </html>
